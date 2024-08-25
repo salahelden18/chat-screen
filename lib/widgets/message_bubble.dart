@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yuppo_chat_app/constants/color_constants.dart';
 import 'package:yuppo_chat_app/models/chat_model.dart';
-import 'package:yuppo_chat_app/services/date_time_format_service.dart';
+import 'package:yuppo_chat_app/services/date_time_service.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({super.key, required this.message});
@@ -34,7 +34,7 @@ class MessageBubble extends StatelessWidget {
               const SizedBox(height: 5),
               // time text
               Text(
-                DateTimeFormatService.formatTime(message.timeStamp),
+                DateTimeService.formatTime(message.timeStamp),
                 style: TextStyle(
                     color: message.isSentByMe ? Colors.white : Colors.black),
               ),

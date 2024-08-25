@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yuppo_chat_app/constants/color_constants.dart';
+import '../constants/color_constants.dart';
+import '../services/date_time_service.dart';
 
 class DateContainerWidget extends StatelessWidget {
   const DateContainerWidget({super.key, required this.date});
@@ -13,7 +14,7 @@ class DateContainerWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: ColorConstants.greyColor,
       ),
-      child: Text(date),
+      child: Text(DateTimeService.getDateText(date)),
     );
   }
 }

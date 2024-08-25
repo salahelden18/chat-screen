@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-import '../services/date_time_format_service.dart';
+import '../services/date_time_service.dart';
 import 'message_states.dart';
 import '../models/chat_model.dart';
 import '../services/messages_generation_service.dart';
@@ -33,7 +33,7 @@ class MessageCubit extends Cubit<MessageState> {
       isSentByMe: true,
     );
 
-    final date = DateTimeFormatService.formatDate(timeStamp);
+    final date = DateTimeService.formatDate(timeStamp);
     // add message to a group
     final updatedMessages = _addMessageToGroup(state.messages, date, chatModel);
     // sort the keys so the latest date appears first
@@ -52,7 +52,7 @@ class MessageCubit extends Cubit<MessageState> {
     final groupedMessages = <String, List<ChatModel>>{};
 
     for (final message in messages) {
-      final date = DateTimeFormatService.formatDate(message.timeStamp);
+      final date = DateTimeService.formatDate(message.timeStamp);
       groupedMessages.putIfAbsent(date, () => []).add(message);
     }
 
