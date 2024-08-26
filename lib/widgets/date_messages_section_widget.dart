@@ -33,6 +33,8 @@ class _DateMessagesSectionWidgetState extends State<DateMessagesSectionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Rebuild for ${widget.date}');
+    debugPrint('Messages length: ${widget.messages.length}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -49,6 +51,8 @@ class _DateMessagesSectionWidgetState extends State<DateMessagesSectionWidget> {
             // wired case happens unexpectly so we handled it in this way
             // it is happens randomly
             if (index < 0 || index >= widget.messages.length) {
+              debugPrint(
+                  'Index $index is out of bounds for messages list of length ${widget.messages.length}');
               return const SizedBox.shrink();
             }
             return MessageWidget(

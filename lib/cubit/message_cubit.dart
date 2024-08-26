@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -17,16 +18,16 @@ class MessageCubit extends Cubit<MessageState> {
 
     final groupedMessages = _groupAndSortMessagesByDate(initialChatMessage);
 
-    print('We have ${groupedMessages.keys.length}');
+    debugPrint('We have ${groupedMessages.keys.length}');
 
     emit(state.copyWith(messages: groupedMessages));
   }
 
   // add message
   void addMessage(String message) {
-    final timeStamp = DateTime.now().millisecondsSinceEpoch;
-    // final timeStamp =
-    //     DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
+    // final timeStamp = DateTime.now().millisecondsSinceEpoch;
+    final timeStamp =
+        DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
 
     // constructing the model
     final chatModel = ChatModel(
@@ -44,7 +45,7 @@ class MessageCubit extends Cubit<MessageState> {
     // we need the sort because if the message sended at another day will be in the top and we want that to be at the bottom
     final sortedMessage = _sortMessagesByDate(updatedMessages);
 
-    print('Now we have ${sortedMessage.keys.length} number of keys');
+    debugPrint('Now we have ${sortedMessage.keys.length} number of keys');
 
     emit(state.copyWith(messages: sortedMessage));
   }
@@ -86,10 +87,10 @@ class MessageCubit extends Cubit<MessageState> {
     state.messages.forEach((key, value) {
       updatedMessages[key] = List.from(value);
     });
-    print(updatedMessages.length);
+    debugPrint('${updatedMessages.length}');
 
     updatedMessages.putIfAbsent(date, () => []).add(message);
-    print(updatedMessages.length);
+    debugPrint('${updatedMessages.length}');
     return updatedMessages;
   }
 }

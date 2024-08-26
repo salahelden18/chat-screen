@@ -10,7 +10,7 @@ class ChatSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final messageCubit = context.watch<MessageCubit>();
     final groupedMessages = messageCubit.state.messages;
-    print('Here from the build ${groupedMessages.keys.length}');
+    debugPrint('Here from the build ${groupedMessages.keys.length}');
     return Expanded(
       child: groupedMessages.values.isEmpty
           ? const Center(
@@ -22,13 +22,13 @@ class ChatSection extends StatelessWidget {
               children: groupedMessages.entries.map((entry) {
                 final date = entry.key;
                 final messages = entry.value;
-                print('=================');
-                print(date);
-                print(messages.length);
-                print('=================');
+                debugPrint('=================');
+                debugPrint(date);
+                debugPrint('${messages.length}');
+                debugPrint('=================');
 
                 return DateMessagesSectionWidget(
-                    date: date, messages: messages);
+                    key: ValueKey(date), date: date, messages: messages);
               }).toList(),
             ),
     );
