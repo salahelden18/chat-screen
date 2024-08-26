@@ -10,17 +10,27 @@ class ChatSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final messageCubit = context.watch<MessageCubit>();
     final groupedMessages = messageCubit.state.messages;
+    print('Here from the build ${groupedMessages.keys.length}');
     return Expanded(
-      child: ListView(
-        reverse: true,
-        padding: const EdgeInsets.all(10),
-        children: groupedMessages.entries.map((entry) {
-          final date = entry.key;
-          final messages = entry.value;
+      child: groupedMessages.values.isEmpty
+          ? const Center(
+              child: Text('No Chat messages added yet'),
+            )
+          : ListView(
+              reverse: true,
+              padding: const EdgeInsets.all(10),
+              children: groupedMessages.entries.map((entry) {
+                final date = entry.key;
+                final messages = entry.value;
+                print('=================');
+                print(date);
+                print(messages.length);
+                print('=================');
 
-          return DateMessagesSectionWidget(date: date, messages: messages);
-        }).toList(),
-      ),
+                return DateMessagesSectionWidget(
+                    date: date, messages: messages);
+              }).toList(),
+            ),
     );
   }
 }

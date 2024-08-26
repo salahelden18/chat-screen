@@ -41,15 +41,9 @@ class _AddMessageSectionState extends State<AddMessageSection> {
           ),
           const SizedBox(width: 10),
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.image),
-          ),
-          const SizedBox(width: 10),
-          IconButton(
             onPressed: message.isEmpty
                 ? null
                 : () {
-                    debugPrint("Executing Add Message $message");
                     // send the message to the cubit
                     context.read<MessageCubit>().addMessage(message);
 

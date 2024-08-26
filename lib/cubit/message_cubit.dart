@@ -17,12 +17,16 @@ class MessageCubit extends Cubit<MessageState> {
 
     final groupedMessages = _groupAndSortMessagesByDate(initialChatMessage);
 
+    print('We have ${groupedMessages.keys.length}');
+
     emit(state.copyWith(messages: groupedMessages));
   }
 
   // add message
   void addMessage(String message) {
     final timeStamp = DateTime.now().millisecondsSinceEpoch;
+    // final timeStamp =
+    //     DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
 
     // constructing the model
     final chatModel = ChatModel(
@@ -37,7 +41,10 @@ class MessageCubit extends Cubit<MessageState> {
     // add message to a group
     final updatedMessages = _addMessageToGroup(state.messages, date, chatModel);
     // sort the keys so the latest date appears first
+    // we need the sort because if the message sended at another day will be in the top and we want that to be at the bottom
     final sortedMessage = _sortMessagesByDate(updatedMessages);
+
+    print('Now we have ${sortedMessage.keys.length} number of keys');
 
     emit(state.copyWith(messages: sortedMessage));
   }
@@ -79,83 +86,10 @@ class MessageCubit extends Cubit<MessageState> {
     state.messages.forEach((key, value) {
       updatedMessages[key] = List.from(value);
     });
+    print(updatedMessages.length);
 
     updatedMessages.putIfAbsent(date, () => []).add(message);
+    print(updatedMessages.length);
     return updatedMessages;
   }
 }
-
-
-
-// void addMessage(String message) {
-  //   debugPrint("Add Message from Cubit");
-
-  //   final timeStamp =
-  //       DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch;
-
-  //   // constructing the model
-  //   final chatModel = ChatModel(
-  //     id: const Uuid().v4(),
-  //     sender: 'User A',
-  //     message: message,
-  //     timeStamp: timeStamp,
-  //     isSentByMe: true,
-  //   );
-
-  //   debugPrint('$chatModel');
-
-  //   // get the date of the message
-  //   final date = DateTimeFormatService.formatDate(timeStamp);
-  //   debugPrint(date);
-
-  //   // Copy current state messages and update with the new message
-  //   // the state should be immutable that is why we create new Map
-  //   // this is a shallow copy will not emit the new state
-  //   // final updatedMessages = Map<String, List<ChatModel>>.from(state.messages);
-  //   // deep copy
-  //   final updatedMessages = <String, List<ChatModel>>{};
-
-  //   state.messages.forEach((key, value) {
-  //     updatedMessages[key] = List.from(value);
-  //   });
-
-  //   if (!updatedMessages.containsKey(date)) {
-  //     updatedMessages[date] = [];
-  //   }
-
-  //   updatedMessages[date]!.add(chatModel);
-
-  //   emit(state.copyWith(messages: updatedMessages));
-  // }
-
-  /**
-   * 
-   * Map<String, List<ChatModel>> _formatChatMessagesWithDates(
-      List<ChatModel> messages) {
-    final Map<String, List<ChatModel>> groupedMessages = {};
-    final dateFormat = DateFormat('MMMM d, yyyy');
-
-    for (final message in messages) {
-      final date = DateTimeFormatService.formatDate(message.timeStamp);
-      // checking if the key exist or not
-      // if the key is not exist we create a key with that
-      if (!groupedMessages.containsKey(date)) {
-        groupedMessages[date] = [];
-      }
-
-      groupedMessages[date]!.add(message);
-    }
-
-    // Extract and sort the dates in reverse order
-    final sortedDates = groupedMessages.keys.toList()
-      ..sort((a, b) => dateFormat.parse(b).compareTo(dateFormat.parse(a)));
-
-    // Create a new map with sorted dates
-    final sortedGroupedMessages = <String, List<ChatModel>>{};
-    for (final date in sortedDates) {
-      sortedGroupedMessages[date] = groupedMessages[date]!;
-    }
-
-    return sortedGroupedMessages;
-  }
-   */

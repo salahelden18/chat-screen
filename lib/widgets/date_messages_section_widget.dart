@@ -22,8 +22,12 @@ class _DateMessagesSectionWidgetState extends State<DateMessagesSectionWidget> {
   void didUpdateWidget(DateMessagesSectionWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.messages.length > oldWidget.messages.length) {
-      animationListKey.currentState?.insertItem(widget.messages.length - 1,
-          duration: const Duration(milliseconds: 500));
+      // Ensure index is within bounds
+      int index = widget.messages.length - 1;
+      if (index >= 0 && index < widget.messages.length) {
+        animationListKey.currentState
+            ?.insertItem(index, duration: const Duration(milliseconds: 500));
+      }
     }
   }
 
@@ -42,24 +46,20 @@ class _DateMessagesSectionWidgetState extends State<DateMessagesSectionWidget> {
           key: animationListKey,
           initialItemCount: widget.messages.length,
           itemBuilder: (context, index, animation) {
-            return _buildMessageItem(index, animation);
+            // wired case happens unexpectly so we handled it in this way
+            // it is happens randomly
+            if (index < 0 || index >= widget.messages.length) {
+              return const SizedBox.shrink();
+            }
+            return MessageWidget(
+              message: widget.messages[index],
+              isPreviousSameUser: isPreviousBySameUser(index),
+              isAfterSameuser: isAfterSameuser(index),
+              animation: animation,
+            );
           },
         ),
       ],
-    );
-  }
-
-  // fade transition only
-  Widget _buildMessageItem(int index, Animation<double> animation) {
-    final message = widget.messages[index];
-
-    return FadeTransition(
-      opacity: animation,
-      child: MessageWidget(
-        message: message,
-        isPreviousSameUser: isPreviousBySameUser(index),
-        isAfterSameuser: isAfterSameuser(index),
-      ),
     );
   }
 
@@ -69,6 +69,7 @@ class _DateMessagesSectionWidgetState extends State<DateMessagesSectionWidget> {
     return widget.messages[index].sender == widget.messages[index - 1].sender;
   }
 
+  // decreasing the space between messages from the same user
   bool isAfterSameuser(int index) {
     // for the last message we add space 20 pixels
     if (widget.messages.length - 1 == index) return false;
@@ -76,45 +77,46 @@ class _DateMessagesSectionWidgetState extends State<DateMessagesSectionWidget> {
     return widget.messages[index].sender == widget.messages[index + 1].sender;
   }
 }
+
 // slide transition
-  // Widget _buildMessageItem(int index, Animation<double> animation) {
-  //   final message = widget.messages[index];
+// Widget _buildMessageItem(int index, Animation<double> animation) {
+//   final message = widget.messages[index];
 
-  //   // Define the starting and ending offset for the slide transition
-  //   final slideOffset = Tween<Offset>(
-  //     begin: const Offset(1, 0), // Start off-screen to the right
-  //     end: Offset.zero, // Slide to its final position
-  //   ).animate(animation);
+//   // Define the starting and ending offset for the slide transition
+//   final slideOffset = Tween<Offset>(
+//     begin: const Offset(1, 0), // Start off-screen to the right
+//     end: Offset.zero, // Slide to its final position
+//   ).animate(animation);
 
-  //   return SlideTransition(
-  //     position: slideOffset,
-  //     child: MessageWidget(
-  //       message: message,
-  //       isPreviousSameUser: isPreviousBySameUser(index),
-  //       isAfterSameuser: isAfterSameuser(index),
-  //     ),
-  //   );
-  // }
+//   return SlideTransition(
+//     position: slideOffset,
+//     child: MessageWidget(
+//       message: message,
+//       isPreviousSameUser: isPreviousBySameUser(index),
+//       isAfterSameuser: isAfterSameuser(index),
+//     ),
+//   );
+// }
 
-  // fade with slide transition
-  // Widget _buildMessageItem(int index, Animation<double> animation) {
-  //   final message = widget.messages[index];
+// fade with slide transition
+// Widget _buildMessageItem(int index, Animation<double> animation) {
+//   final message = widget.messages[index];
 
-  //   // Define the starting and ending offset for the slide transition
-  //   final slideOffset = Tween<Offset>(
-  //     begin: const Offset(0, 1), // Start off-screen at the bottom
-  //     end: Offset.zero, // Slide to its final position
-  //   ).animate(animation);
+//   // Define the starting and ending offset for the slide transition
+//   final slideOffset = Tween<Offset>(
+//     begin: const Offset(0, 1), // Start off-screen at the bottom
+//     end: Offset.zero, // Slide to its final position
+//   ).animate(animation);
 
-  //   return FadeTransition(
-  //     opacity: animation,
-  //     child: SlideTransition(
-  //       position: slideOffset,
-  //       child: MessageWidget(
-  //         message: message,
-  //         isPreviousSameUser: isPreviousBySameUser(index),
-  //         isAfterSameuser: isAfterSameuser(index),
-  //       ),
-  //     ),
-  //   );
-  // }
+//   return FadeTransition(
+//     opacity: animation,
+//     child: SlideTransition(
+//       position: slideOffset,
+//       child: MessageWidget(
+//         message: message,
+//         isPreviousSameUser: isPreviousBySameUser(index),
+//         isAfterSameuser: isAfterSameuser(index),
+//       ),
+//     ),
+//   );
+// }

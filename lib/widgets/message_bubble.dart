@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yuppo_chat_app/constants/color_constants.dart';
-import 'package:yuppo_chat_app/models/chat_model.dart';
-import 'package:yuppo_chat_app/services/date_time_service.dart';
+import '../constants/color_constants.dart';
+import '../models/chat_model.dart';
+import '../services/date_time_service.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({super.key, required this.message});

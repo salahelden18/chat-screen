@@ -49,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('rebuild');
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -61,7 +60,9 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       body: Column(
         children: [
+          // chat part
           const ChatSection(),
+          // part of the quick responses and the adding message
           Column(
             children: [
               if (isAutoReplyListShowen)
